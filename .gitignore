@@ -14,3 +14,14 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+*.db
+*.db-wal
+*.db-shm
+*.v2
+journey-camera-prototype/addons/debug_draw_3d/libs/.gdignore
+*.so
+journey-camera-prototype/addons/debug_draw_3d/libs/libdd3d.ios.template_debug.universal.dylib
+*.dylib
+*.wasm
+*.dll
+*.vsidx

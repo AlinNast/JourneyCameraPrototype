@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkpwafwmwghyd"]
+
+[ext_resource type="PackedScene" uid="uid://dhtqvq6hbfnvd" path="res://camera_controller.tscn" id="1_u52ul"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_5xgho"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u52ul"]
+size = Vector3(28.649292, 1, 15.211304)
+
+[node name="Level" type="Node3D"]
+
+[node name="Floor" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.146158, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D"]
+transform = Transform3D(28.786167, 0, 0, 0, 1, 0, 0, 0, 15.254395, 0, 0, 0)
+mesh = SubResource("BoxMesh_5xgho")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.062927246, 0, 0.018737793)
+shape = SubResource("BoxShape3D_u52ul")
+
+[node name="testtarget" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0476589, 0)
+
+[node name="CameraController" parent="." node_paths=PackedStringArray("lookTarget") instance=ExtResource("1_u52ul")]
+transform = Transform3D(1, 0, 0, 0, 0.89109373, 0.45381945, 0, -0.45381945, 0.89109373, 0, 3.4423904, 5.5294695)
+lookTarget = NodePath("../testtarget")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.04304675, -0.3208775, 0.946142, 0.014583921, 0.9471207, 0.3205459, -0.99896663, 0, 0.04545012, 14.0935755, 3.8044996, 0)
