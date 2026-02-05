@@ -17,17 +17,26 @@ public partial class CameraController : Node3D
     // Azimuth is the angle between the Forward vector of the target (where az is 0)
     // and the actual orientation of the camera
     float azimuth;
-	// Zenith is the Pitch or elevation of the camera.
-	// Here used as the angle between the vertical vector of the target and the ground paralel
-    float zenith;
+    float azimuthVelocity = 0;
 
+    // Zenith is the Pitch or elevation of the camera.
+    // Here used as the angle between the vertical vector of the target and the ground paralel
+    float zenith;
+    float zenithVelocity = 0;
 
     // Distance from the target
     float radius = 10;
 
+    float joystickDeadzone = 0.2f;
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+    float acceleration = 2.0f;
+    float friction = 3.0f;
+
+    float zenithResistance = 0.5f;
+
+
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
 	{
         azimuth = -lookTarget.Basis.Z.Z;
 		zenith = lookTarget.Basis.Y.Y;
@@ -36,17 +45,16 @@ public partial class CameraController : Node3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-        // 1. Keep the Controller (Pivot) locked to the target's position
+        // Keep the Controller (Pivot) locked to the target's position
         this.GlobalPosition = lookTarget.GlobalPosition;
 
 
-        // 2. Update azimuth and zenith based on input
-		zenith +=  (float)delta * (float)(Input.GetJoyAxis(0, JoyAxis.RightY)) ;
-		azimuth += (float)delta * (float)(Input.GetJoyAxis(0, JoyAxis.RightX)) ;
+        // Update azimuth and zenith based on input
+        ProcessInput((float)delta);
 
-        // 3. Clamp Zenith so the camera doesn't flip upside down at the poles
-        // Clamping between approx 0 and -80 degrees (in radians)
-        zenith = Mathf.Clamp(zenith, Mathf.DegToRad(-80), Mathf.DegToRad(0));
+
+
+
 
         // 4. Apply rotation to the Controller Node
         // We create a Basis from Euler angles (X, Y, Z)
@@ -63,53 +71,62 @@ public partial class CameraController : Node3D
 
         // draw target and info
         DebugDraw3D.DrawSphere(lookTarget.GlobalPosition, 1, new Color(0.5f, 0.5f, 0.5f));
-        //DebugDraw3D.DrawArrow(Vector3.Zero, new Vector3(0,azimuth*10,0), new Color(0.5f, 0.2f, 0));
-        //DebugDraw3D.DrawArrow(Vector3.Zero, new Vector3(0, zenith * 10, 0), new Color(0.5f, 0.2f, 0));
 
 
-
-        // Clamp Zenith to prevent "Gimbal Lock" or flipping over the top (pole)
-        // 1.55 radians is roughly 89 degrees.
-        //zenith = Mathf.Clamp(zenith, -1.55f, 1.55f);
-
-        // Apply position and look at the target
-        //camera.GlobalPosition = CalculateCameraPosition();
-        //camera.LookAt(lookTarget.GlobalPosition, Vector3.Up);
-
-        //Basis yaw = new Basis(Vector3.Up, azimuth);
-        //Basis pitch = new Basis(Vector3.Right, zenith);
-
-
-        //this.RotateX((float)(Input.GetJoyAxis(0, JoyAxis.RightY) * -0.2));
-        //this.RotateY((float)(Input.GetJoyAxis(0, JoyAxis.RightX) * 0.2));
-        //this.RotateZ((float)(Input.GetJoyAxis(0, JoyAxis.RightY) * -0.2));
-        //this.Basis = pitch * yaw;
-
-        // Debug Zenith
-        //DebugDraw3D.DrawArrow(Vector3.Zero, pitch.X, Colors.Red, 0.1f, true);
-        //DebugDraw3D.DrawArrow(Vector3.Zero, pitch.Y, Colors.Green, 0.1f, true);
-        //DebugDraw3D.DrawArrow(Vector3.Zero, pitch.Z, Colors.Blue, 0.1f, true);
-
-        // Debug Azimuth
-        //DebugDraw3D.DrawArrow(Vector3.Zero, yaw.X, Colors.Red, 0.1f, true);
-        //DebugDraw3D.DrawArrow(Vector3.Zero, yaw.Y, Colors.Green, 0.1f, true);
-        //DebugDraw3D.DrawArrow(Vector3.Zero, yaw.Z, Colors.Blue, 0.1f, true);
-
-        //DebugDraw3D.DrawArrow(Vector3.Zero, (Vector3.Right * 10) * (pitch * yaw));
-
-
-        //camera.Position = Position + CalculateCameraPosition();
-        //camera.LookAt(lookTarget.GlobalPosition);
     }
 
-    private Vector3 CalculateCameraPosition()
-	{
-        float x = radius * Mathf.Sin(azimuth) * Mathf.Cos(zenith);
-        float y = radius * Mathf.Sin(zenith);
-        float z = radius * Mathf.Cos(azimuth) * Mathf.Cos(zenith);
 
-        Vector3 offset = new Vector3(x, y, z);
 
-        return this.GlobalPosition + offset;
+
+    private void ProcessInput(float delta)
+    {
+        // Apply Acceleration only when input is above the deadzone, otherwise apply friction to slow down the camera when the joystick is released.
+        if (Mathf.Abs(Input.GetJoyAxis(0, JoyAxis.RightX)) > joystickDeadzone)
+        {
+            azimuthVelocity += delta * (float)(Input.GetJoyAxis(0, JoyAxis.RightX)) * acceleration;
+        }
+        else 
+        {
+            azimuthVelocity -= azimuthVelocity * friction * delta;
+        }
+        // Clamp the velocity to prevent it from getting too high, which would make the camera uncontrollable.
+        azimuthVelocity = Mathf.Clamp(azimuthVelocity, -2.0f, 2.0f);
+
+        // Update the Azimuth based on vecloty and Keep it in the range of 0 to 360 degrees
+        azimuth += azimuthVelocity * delta;
+        azimuth = Mathf.PosMod(azimuth, Mathf.Tau);
+
+
+        // Zenith control like azimuth
+        if (Mathf.Abs(Input.GetJoyAxis(0, JoyAxis.RightY)) > joystickDeadzone)
+        {
+            zenithVelocity += delta * (float)(Input.GetJoyAxis(0, JoyAxis.RightY)) * acceleration;
+        }
+        else
+        {
+            zenithVelocity -= zenithVelocity * friction * delta;
+        }
+
+
+
+        // Zenith resistance near the poles approaches 0 (1 means no resistance, 0 means full resistance)
+        if (zenith < Mathf.DegToRad(-50) && zenithVelocity < 0)
+        {
+            zenithResistance = Mathf.Remap(zenith, Mathf.DegToRad(-50), Mathf.DegToRad(-80), 1.0f, 0.0f);
+        }
+        else if (zenith > Mathf.DegToRad(-30) && zenithVelocity > 0)
+        {
+            zenithResistance = Mathf.Remap(zenith, Mathf.DegToRad(-30), Mathf.DegToRad(0), 1.0f, 0.0f);
+        }
+        else
+        {
+            zenithResistance = 1.0f;
+        }
+
+        // Resistance slows zenith from reaching the ceiling or floor and stops its movement entirely at the limits
+        zenith += zenithVelocity * delta * (zenithResistance*zenithResistance);
+
+        // Clamp Zenith so the camera doesn't flip upside down at the poles
+        zenith = Mathf.Clamp(zenith, Mathf.DegToRad(-80), Mathf.DegToRad(0));
     }
 }
