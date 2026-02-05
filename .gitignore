@@ -25,3 +25,7 @@ journey-camera-prototype/addons/debug_draw_3d/libs/libdd3d.ios.template_debug.un
 *.wasm
 *.dll
 *.vsidx
+journey-camera-prototype/.vs/JOURNEYCAMERAPROTOTYPE/v17/.suo
+journey-camera-prototype/.vs/ProjectEvaluation/journeycameraprototype.metadata.v9.bin
+journey-camera-prototype/.vs/ProjectEvaluation/journeycameraprototype.projects.v9.bin
+*.bin

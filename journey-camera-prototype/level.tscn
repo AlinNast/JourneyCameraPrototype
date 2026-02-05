@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://dkpwafwmwghyd"]
+[gd_scene load_steps=5 format=3 uid="uid://dkpwafwmwghyd"]
 
 [ext_resource type="PackedScene" uid="uid://dhtqvq6hbfnvd" path="res://camera_controller.tscn" id="1_u52ul"]
+[ext_resource type="PackedScene" uid="uid://dey83bwqet80s" path="res://player.tscn" id="2_vonw3"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_5xgho"]
 
@@ -22,12 +23,71 @@ mesh = SubResource("BoxMesh_5xgho")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.062927246, 0, 0.018737793)
 shape = SubResource("BoxShape3D_u52ul")
 
+[node name="StaticBody3D2" type="StaticBody3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.562435, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D2"]
+transform = Transform3D(28.786167, 0, 0, 0, 1, 0, 0, 0, 15.254395, 0, 0, 0)
+mesh = SubResource("BoxMesh_5xgho")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.062927246, 0, 0.018737793)
+shape = SubResource("BoxShape3D_u52ul")
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56.58504, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D3"]
+transform = Transform3D(28.786167, 0, 0, 0, 1, 0, 0, 0, 15.254395, 0, 0, 0)
+mesh = SubResource("BoxMesh_5xgho")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.062927246, 0, 0.018737793)
+shape = SubResource("BoxShape3D_u52ul")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="Floor"]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, -76.28501, 3.8146973e-06, -6.721594)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D4"]
+transform = Transform3D(28.786167, 0, 0, 0, 1, 0, 0, 0, 15.254395, 0, 0, 0)
+mesh = SubResource("BoxMesh_5xgho")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.062927246, 0, 0.018737793)
+shape = SubResource("BoxShape3D_u52ul")
+
+[node name="StaticBody3D5" type="StaticBody3D" parent="Floor"]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, -76.28501, 3.8146973e-06, -34.80336)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D5"]
+transform = Transform3D(28.786167, 0, 0, 0, 1, 0, 0, 0, 15.254395, 0, 0, 0)
+mesh = SubResource("BoxMesh_5xgho")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.062927246, 0, 0.018737793)
+shape = SubResource("BoxShape3D_u52ul")
+
+[node name="StaticBody3D6" type="StaticBody3D" parent="Floor"]
+transform = Transform3D(1.9106853e-15, -4.3711385e-08, -0.9999999, -0.99999994, -4.3711385e-08, 0, -4.3711385e-08, 0.99999994, -4.3711385e-08, -9.389494, 14.414991, -7.054886)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D6"]
+transform = Transform3D(28.786167, 0, 0, 0, 1, 0, 0, 0, 15.254395, 0, 0, 0)
+mesh = SubResource("BoxMesh_5xgho")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.062927246, 0, 0.018737793)
+shape = SubResource("BoxShape3D_u52ul")
+
 [node name="testtarget" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0476589, 0)
 
 [node name="CameraController" parent="." node_paths=PackedStringArray("lookTarget") instance=ExtResource("1_u52ul")]
 transform = Transform3D(1, 0, 0, 0, 0.89109373, 0.45381945, 0, -0.45381945, 0.89109373, 0, 3.4423904, 5.5294695)
-lookTarget = NodePath("../testtarget")
+lookTarget = NodePath("../Player")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.04304675, -0.3208775, 0.946142, 0.014583921, 0.9471207, 0.3205459, -0.99896663, 0, 0.04545012, 14.0935755, 3.8044996, 0)
+
+[node name="Player" parent="." node_paths=PackedStringArray("CameraPivot") instance=ExtResource("2_vonw3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3144817, 0.35384202, 1.5223198)
+CameraPivot = NodePath("../CameraController")

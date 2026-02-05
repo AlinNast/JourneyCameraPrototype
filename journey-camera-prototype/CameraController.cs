@@ -26,6 +26,8 @@ public partial class CameraController : Node3D
 
     // Distance from the target
     float radius = 10;
+    float idealRadius = 10;
+    float availableRadius = 10;
 
     float joystickDeadzone = 0.2f;
 
@@ -53,24 +55,19 @@ public partial class CameraController : Node3D
         ProcessInput((float)delta);
 
 
+        UpdateCameraCollision((float)delta);
 
 
-
-        // 4. Apply rotation to the Controller Node
-        // We create a Basis from Euler angles (X, Y, Z)
+        // Apply rotation to the Controller Node
         this.Basis = Basis.FromEuler(new Vector3(zenith, azimuth, 0));
 
-        // 5. Position the Camera relative to the Controller
+        // Position the Camera relative to the Controller
         // Since the Controller is rotating, we just push the camera back 
         // along its local Z axis by the radius.
         camera.Position = new Vector3(0, 0, radius);
 
-        // 6. Ensure the camera is looking at the pivot point
+        // Ensure the camera is looking at the pivot point
         camera.LookAt(this.GlobalPosition, Vector3.Up);
-
-
-        // draw target and info
-        DebugDraw3D.DrawSphere(lookTarget.GlobalPosition, 1, new Color(0.5f, 0.5f, 0.5f));
 
 
     }
@@ -128,5 +125,51 @@ public partial class CameraController : Node3D
 
         // Clamp Zenith so the camera doesn't flip upside down at the poles
         zenith = Mathf.Clamp(zenith, Mathf.DegToRad(-80), Mathf.DegToRad(0));
+    }
+
+    private void UpdateCameraCollision(float delta)
+    {
+
+        // Calculate the 'Desired' Global Position of the camera
+        // take the current orientation (Basis) and look at the 'Back' vector (Z axis)
+        // and multiply it by our maximum radius.
+        Vector3 rayStart = this.GlobalPosition;
+        Vector3 rayEnd = rayStart + (this.GlobalBasis.Z * idealRadius);
+
+
+        // Access the Physics Space
+        var spaceState = GetWorld3D().DirectSpaceState;
+
+        // Create the Ray Parameters
+        var query = PhysicsRayQueryParameters3D.Create(rayStart, rayEnd);
+        DebugDraw3D.DrawLine(rayStart, rayEnd, new Color(1, 0, 0));
+
+        // Tell the ray to ignore the player/lookTarget
+        ///query.Exclude = new Godot.Collections.Array<Rid> { lookTarget.GetRid() };
+
+        // Perform the Trace
+        var result = spaceState.IntersectRay(query);
+
+        float lerpSpeed = (availableRadius < radius) ? 30.0f : 10.0f;
+        // Investigate
+        if (result.Count > 0)
+        {
+            // Wall hit!
+            Vector3 hitPos = (Vector3)result["position"];
+            float distance = rayStart.DistanceTo(hitPos);
+            availableRadius = distance - 1;
+
+            // Lerp the radius towards the available radius to create a smooth transition when hitting walls
+            radius = Mathf.Lerp(radius, availableRadius, delta * lerpSpeed);
+
+            GD.Print($"WALL DETECTED! Distance: {distance} | Object: {result["collider"]}");
+        }
+        else
+        {
+            // No wall, we can go back to our ideal radius, But speed is slower for beauty
+            radius = Mathf.Lerp(radius, idealRadius, delta * 2);
+            GD.Print("Path is clear.");
+        }
+        radius = Mathf.Clamp(radius, 0.5f, idealRadius);
     }
 }
