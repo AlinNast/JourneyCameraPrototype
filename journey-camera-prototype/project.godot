@@ -22,3 +22,16 @@ settings/addon_root_folder="res://addons/debug_draw_3d"
 [dotnet]
 
 project/assembly_name="JourneyCameraPrototype"
+
+[input]
+
+Jump={
+"deadzone": 0.2,
+"events": [Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":0,"pressure":0.0,"pressed":true,"script":null)
+]
+}
+
+[layer_names]
+
+3d_physics/layer_1="environment"
+3d_physics/layer_2="Camera ignore"

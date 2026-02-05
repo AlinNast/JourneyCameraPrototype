@@ -80,7 +80,7 @@ public partial class CameraController : Node3D
         // Apply Acceleration only when input is above the deadzone, otherwise apply friction to slow down the camera when the joystick is released.
         if (Mathf.Abs(Input.GetJoyAxis(0, JoyAxis.RightX)) > joystickDeadzone)
         {
-            azimuthVelocity += delta * (float)(Input.GetJoyAxis(0, JoyAxis.RightX)) * acceleration;
+            azimuthVelocity += delta * -(float)(Input.GetJoyAxis(0, JoyAxis.RightX)) * acceleration;
         }
         else 
         {
@@ -134,41 +134,105 @@ public partial class CameraController : Node3D
         // take the current orientation (Basis) and look at the 'Back' vector (Z axis)
         // and multiply it by our maximum radius.
         Vector3 rayStart = this.GlobalPosition;
-        Vector3 rayEnd = rayStart + (this.GlobalBasis.Z * idealRadius);
+        Vector3 rayEnd = rayStart + (this.GlobalBasis.Z * idealRadius); // Main Ray
+
+        // additional ray ends to create a fan
+        Vector3 rayEnd2 = rayStart + (this.GlobalBasis.Z.Rotated(Vector3.Up, Mathf.DegToRad(10)) * idealRadius);
+        Vector3 rayEnd3 = rayStart + (this.GlobalBasis.Z.Rotated(Vector3.Up, Mathf.DegToRad(-10)) * idealRadius);
+        Vector3 rayEnd4 = rayStart + (this.GlobalBasis.Z.Rotated(this.GlobalBasis.X, Mathf.DegToRad(5)) * idealRadius);
+        Vector3 rayEnd5 = rayStart + (this.GlobalBasis.Z.Rotated(this.GlobalBasis.X, Mathf.DegToRad(-5)) * idealRadius);
 
 
         // Access the Physics Space
         var spaceState = GetWorld3D().DirectSpaceState;
 
         // Create the Ray Parameters
+        // Main Ray
         var query = PhysicsRayQueryParameters3D.Create(rayStart, rayEnd);
         DebugDraw3D.DrawLine(rayStart, rayEnd, new Color(1, 0, 0));
 
-        // Tell the ray to ignore the player/lookTarget
-        ///query.Exclude = new Godot.Collections.Array<Rid> { lookTarget.GetRid() };
+        // Additional Rays for better collision detection
+        var query2 = PhysicsRayQueryParameters3D.Create(rayStart, rayEnd2);
+        DebugDraw3D.DrawLine(rayStart, rayEnd2, new Color(1, 0, 0));
+
+        var query3 = PhysicsRayQueryParameters3D.Create(rayStart, rayEnd3);
+        DebugDraw3D.DrawLine(rayStart, rayEnd3, new Color(1, 0, 0));
+
+        var query4 = PhysicsRayQueryParameters3D.Create(rayStart, rayEnd4);
+        DebugDraw3D.DrawLine(rayStart, rayEnd4, new Color(1, 0, 0));
+
+        var query5 = PhysicsRayQueryParameters3D.Create(rayStart, rayEnd5);
+        DebugDraw3D.DrawLine(rayStart, rayEnd5, new Color(1, 0, 0));
+
+        // Set the collision mask to 1
+        query.CollisionMask = 1;
+        query2.CollisionMask = 1;
+        query3.CollisionMask = 1;
+        query4.CollisionMask = 1;
+        query5.CollisionMask = 1;
 
         // Perform the Trace
         var result = spaceState.IntersectRay(query);
+        var result2 = spaceState.IntersectRay(query2);
+        var result3 = spaceState.IntersectRay(query3);
+        var result4 = spaceState.IntersectRay(query4);
+        var result5 = spaceState.IntersectRay(query5);
 
         float lerpSpeed = (availableRadius < radius) ? 30.0f : 10.0f;
+        float minDistance = idealRadius;
+
         // Investigate
-        if (result.Count > 0)
+        if (result.Count > 0) // Main Ray
         {
-            // Wall hit!
             Vector3 hitPos = (Vector3)result["position"];
             float distance = rayStart.DistanceTo(hitPos);
-            availableRadius = distance - 1;
+            if (distance < minDistance)
+                minDistance = distance;
+        }
+        if (result2.Count > 0) // Right Ray
+        {
+            Vector3 hitPos = (Vector3)result2["position"];
+            float distance = rayStart.DistanceTo(hitPos);
+            if (distance < minDistance)
+                minDistance = distance;
+        }
+        if (result3.Count > 0) // Left Ray
+        {
+            Vector3 hitPos = (Vector3)result3["position"];
+            float distance = rayStart.DistanceTo(hitPos);
+            if (distance < minDistance)
+                minDistance = distance;
+        }
+        if (result4.Count > 0) // Up Ray
+        {
+            Vector3 hitPos = (Vector3)result4["position"];
+            float distance = rayStart.DistanceTo(hitPos);
+            if (distance < minDistance)
+                minDistance = distance;
+        }
+        if (result5.Count > 0) // Down Ray
+        {
+            Vector3 hitPos = (Vector3)result5["position"];
+            float distance = rayStart.DistanceTo(hitPos);
+            if (distance < minDistance)
+                minDistance = distance;
+        }
+        GD.Print($"WALL DETECTED! Distance: {minDistance}");
 
+        // Adjust the radius based on the closest wall detected
+        if (minDistance < idealRadius)
+        {
+            // Wall hit!
+            availableRadius = minDistance - 1;
             // Lerp the radius towards the available radius to create a smooth transition when hitting walls
             radius = Mathf.Lerp(radius, availableRadius, delta * lerpSpeed);
-
-            GD.Print($"WALL DETECTED! Distance: {distance} | Object: {result["collider"]}");
+            //GD.Print($"WALL DETECTED! Distance: {minDistance}");
         }
         else
         {
             // No wall, we can go back to our ideal radius, But speed is slower for beauty
             radius = Mathf.Lerp(radius, idealRadius, delta * 2);
-            GD.Print("Path is clear.");
+            //GD.Print("Path is clear.");
         }
         radius = Mathf.Clamp(radius, 0.5f, idealRadius);
     }

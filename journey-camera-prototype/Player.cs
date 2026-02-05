@@ -18,7 +18,11 @@ public partial class Player : CharacterBody3D
         if (!IsOnFloor())
             velocity.Y -= gravity * (float)delta;
 
-        // Input for jumpig will go here
+        // Jump
+        if (Input.IsActionJustPressed("Jump") && IsOnFloor())
+        {
+            velocity.Y = 5.0f; 
+        }
 
         // Get Joystick Input (-1.0 to 1.0)
         float inputX = Input.GetJoyAxis(0, JoyAxis.LeftX);
