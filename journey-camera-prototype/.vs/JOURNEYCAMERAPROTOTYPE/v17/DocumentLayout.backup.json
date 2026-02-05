@@ -5,10 +5,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{59CC7DFA-3E0D-459E-84BC-4DC2093C3BFA}|JourneyCameraPrototype.csproj|c:\\users\\alin1\\documents\\github\\schoolltu\\journeycameraprototype\\journey-camera-prototype\\cameracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{59CC7DFA-3E0D-459E-84BC-4DC2093C3BFA}|JourneyCameraPrototype.csproj|solutionrelative:cameracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Alin1\\Documents\\Github\\SchoolLTU\\JourneyCameraPrototype\\journey-camera-prototype\\Player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,21 +14,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Player.cs",
-              "DocumentMoniker": "C:\\Users\\Alin1\\Documents\\Github\\SchoolLTU\\JourneyCameraPrototype\\journey-camera-prototype\\Player.cs",
-              "RelativeDocumentMoniker": "Player.cs",
-              "ToolTip": "C:\\Users\\Alin1\\Documents\\Github\\SchoolLTU\\JourneyCameraPrototype\\journey-camera-prototype\\Player.cs",
-              "RelativeToolTip": "Player.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAA1wBcAAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-05T18:16:34.271Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -41,7 +24,7 @@
               "RelativeDocumentMoniker": "CameraController.cs",
               "ToolTip": "C:\\Users\\Alin1\\Documents\\Github\\SchoolLTU\\JourneyCameraPrototype\\journey-camera-prototype\\CameraController.cs",
               "RelativeToolTip": "CameraController.cs",
-              "ViewState": "AgIAAI8AAAAAAAAAAAAqwKoAAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAACYAAAAAAAAAAAA0wDwAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-04T20:49:34.386Z",
               "EditorCaption": ""
