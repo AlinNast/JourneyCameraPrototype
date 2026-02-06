@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://dkpwafwmwghyd"]
+[gd_scene load_steps=8 format=3 uid="uid://dkpwafwmwghyd"]
 
+[ext_resource type="Script" uid="uid://bqsy356lkfi7a" path="res://TriggerCinematic.cs" id="1_oi3di"]
 [ext_resource type="PackedScene" uid="uid://dhtqvq6hbfnvd" path="res://camera_controller.tscn" id="1_u52ul"]
 [ext_resource type="PackedScene" uid="uid://dey83bwqet80s" path="res://player.tscn" id="2_vonw3"]
 
@@ -258,8 +259,10 @@ mesh = SubResource("BoxMesh_5xgho")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.062927246, 0, 0.018737793)
 shape = SubResource("BoxShape3D_u52ul")
 
-[node name="StaticBody3D8" type="StaticBody3D" parent="Floor"]
+[node name="StaticBody3D8" type="StaticBody3D" parent="Floor" node_paths=PackedStringArray("player")]
 transform = Transform3D(-2.6865097e-08, 0.6146018, -0.7888373, -0.9999999, -4.3711378e-08, -1.5529403e-22, -3.4481175e-08, 0.7888373, 0.61460173, -50.622643, 14.414991, -2.7751694)
+script = ExtResource("1_oi3di")
+player = NodePath("../../Player")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D8"]
 transform = Transform3D(28.786167, 0, 0, 0, 1, 0, 0, 0, 15.254395, 0, 0, 0)

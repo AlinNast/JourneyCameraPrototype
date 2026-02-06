@@ -1,12 +1,14 @@
 using Godot;
+using JourneyCameraPrototype;
 using System;
 
-public partial class Player : CharacterBody3D
+public partial class Player : CharacterBody3D , ICameraController
 {
     [Export] public float Speed = 5.0f;
     [Export] public float Acceleration = 15.0f;
     [Export] public float Friction = 20.0f;
     public float gravity = 10.0f;
+    bool isDoingCinematic = false;
 
     // This allows you to link your CameraController in the editor
     [Export] public Node3D CameraPivot;
@@ -38,7 +40,7 @@ public partial class Player : CharacterBody3D
         // Convert Input to World Direction
         Vector3 direction = Vector3.Zero;
 
-        if (CameraPivot != null)
+        if (CameraPivot != null && !isDoingCinematic)
         {
             Basis camBasis = CameraPivot.GlobalTransform.Basis;
             // Calculate movement relative to Camera rotation
@@ -74,5 +76,16 @@ public partial class Player : CharacterBody3D
        
         Velocity = velocity;
         MoveAndSlide();
+    }
+
+    public void ChangeToCinematic()
+    {
+        isDoingCinematic = true;
+        ((ICameraController)CameraPivot).ChangeToCinematic();
+    }
+
+    public void ChangeToPlayer()
+    {
+        isDoingCinematic = false;
     }
 }

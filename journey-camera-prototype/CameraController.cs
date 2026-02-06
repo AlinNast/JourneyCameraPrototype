@@ -71,7 +71,7 @@ public partial class CameraController : Node3D, ICameraController
         cameraTargetPosition.Position = new Vector3(0, 0, radius);
         
         // this should be in the camere but it isnt but the camera works anyway :))
-        DebugDraw3D.DrawSphere(cameraTargetPosition.GlobalPosition, 0.5f, new Color(1, 0, 0));
+        // DebugDraw3D.DrawSphere(cameraTargetPosition.GlobalPosition, 0.5f, new Color(1, 0, 0));
 
         camera.GlobalPosition = cameraTargetPosition.GlobalPosition;
 
@@ -158,20 +158,20 @@ public partial class CameraController : Node3D, ICameraController
         // Create the Ray Parameters
         // Main Ray
         var query = PhysicsRayQueryParameters3D.Create(rayStart, rayEnd);
-        DebugDraw3D.DrawLine(rayStart, rayEnd, new Color(1, 0, 0));
+        //DebugDraw3D.DrawLine(rayStart, rayEnd, new Color(1, 0, 0));
 
         // Additional Rays for better collision detection
         var query2 = PhysicsRayQueryParameters3D.Create(rayStart, rayEnd2);
-        DebugDraw3D.DrawLine(rayStart, rayEnd2, new Color(1, 0, 0));
+        //DebugDraw3D.DrawLine(rayStart, rayEnd2, new Color(1, 0, 0));
 
         var query3 = PhysicsRayQueryParameters3D.Create(rayStart, rayEnd3);
-        DebugDraw3D.DrawLine(rayStart, rayEnd3, new Color(1, 0, 0));
+        //DebugDraw3D.DrawLine(rayStart, rayEnd3, new Color(1, 0, 0));
 
         var query4 = PhysicsRayQueryParameters3D.Create(rayStart, rayEnd4);
-        DebugDraw3D.DrawLine(rayStart, rayEnd4, new Color(1, 0, 0));
+        //DebugDraw3D.DrawLine(rayStart, rayEnd4, new Color(1, 0, 0));
 
         var query5 = PhysicsRayQueryParameters3D.Create(rayStart, rayEnd5);
-        DebugDraw3D.DrawLine(rayStart, rayEnd5, new Color(1, 0, 0));
+        //DebugDraw3D.DrawLine(rayStart, rayEnd5, new Color(1, 0, 0));
 
         // Set the collision mask to 1
         query.CollisionMask = 1;
@@ -228,7 +228,7 @@ public partial class CameraController : Node3D, ICameraController
             if (distance < minDistance)
                 minDistance = distance;
         }
-        GD.Print($"WALL DETECTED! Distance: {minDistance}");
+        //GD.Print($"WALL DETECTED! Distance: {minDistance}");
 
         // Adjust the radius based on the closest wall detected
         if (minDistance < idealRadius)
@@ -250,7 +250,7 @@ public partial class CameraController : Node3D, ICameraController
 
     public void ChangeToCinematic()
     {
-        GD.Print("voila");
+        GD.Print("voila in the cotroller");
     }
 
     public void ChangeToPlayer()
