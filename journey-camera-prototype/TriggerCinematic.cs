@@ -11,9 +11,9 @@ public partial class TriggerCinematic : StaticBody3D
 	bool isCinematic;
 
 	[Export]
-	float triggerDistance = 50;
+	float triggerDistance = 30;
 
-	bool didTrigger = true;
+	bool didTrigger = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -26,7 +26,11 @@ public partial class TriggerCinematic : StaticBody3D
 		if ((Position - player.Position).Length() < triggerDistance)
 		{
 			((ICameraController)player).ChangeToCinematic();
-
+		}
+		else 
+		{
+			((ICameraController)player).ChangeToPlayer();
         }
+
 	}
 }

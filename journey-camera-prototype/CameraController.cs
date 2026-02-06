@@ -7,6 +7,8 @@ public partial class CameraController : Node3D, ICameraController
 	[Export]
 	Node3D lookTarget;
     [Export]
+    Node3D cinematicTarget;
+    [Export]
     Node3D cameraTargetPosition;
 	[Export]
 	Camera3D camera;
@@ -39,13 +41,17 @@ public partial class CameraController : Node3D, ICameraController
 
     float zenithResistance = 0.5f;
 
+    bool isCinematic = false;
+    float cinematicAzimuth = 0;
+
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
         azimuth = -lookTarget.Basis.Z.Z;
 		zenith = lookTarget.Basis.Y.Y;
-	}
+        camera.GlobalPosition = cameraTargetPosition.GlobalPosition;
+    }
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -64,16 +70,28 @@ public partial class CameraController : Node3D, ICameraController
         // Apply rotation to the Controller Node
         this.Basis = Basis.FromEuler(new Vector3(zenith, azimuth, 0));
 
+
         // Position the Camera relative to the Controller
         // Since the Controller is rotating, we just push the camera back 
         // along its local Z axis by the radius.
 
+
         cameraTargetPosition.Position = new Vector3(0, 0, radius);
-        
+
+
+
         // this should be in the camere but it isnt but the camera works anyway :))
         // DebugDraw3D.DrawSphere(cameraTargetPosition.GlobalPosition, 0.5f, new Color(1, 0, 0));
 
-        camera.GlobalPosition = cameraTargetPosition.GlobalPosition;
+        if (isCinematic)
+        {
+            camera.GlobalPosition = camera.GlobalPosition.Lerp(cinematicTarget.GlobalPosition, (float)delta);
+        }
+        else
+        {
+            camera.GlobalPosition = camera.GlobalPosition.Lerp(cameraTargetPosition.GlobalPosition, (float)delta*5);
+        }
+        //camera.GlobalPosition = cameraTargetPosition.GlobalPosition;
 
         // Ensure the camera is looking at the pivot point
         camera.LookAt(this.GlobalPosition, Vector3.Up);
@@ -250,11 +268,11 @@ public partial class CameraController : Node3D, ICameraController
 
     public void ChangeToCinematic()
     {
-        GD.Print("voila in the cotroller");
+        isCinematic = true;
     }
 
     public void ChangeToPlayer()
     {
-        throw new NotImplementedException();
+        isCinematic = false;
     }
 }

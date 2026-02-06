@@ -259,10 +259,8 @@ mesh = SubResource("BoxMesh_5xgho")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.062927246, 0, 0.018737793)
 shape = SubResource("BoxShape3D_u52ul")
 
-[node name="StaticBody3D8" type="StaticBody3D" parent="Floor" node_paths=PackedStringArray("player")]
+[node name="StaticBody3D8" type="StaticBody3D" parent="Floor"]
 transform = Transform3D(-2.6865097e-08, 0.6146018, -0.7888373, -0.9999999, -4.3711378e-08, -1.5529403e-22, -3.4481175e-08, 0.7888373, 0.61460173, -50.622643, 14.414991, -2.7751694)
-script = ExtResource("1_oi3di")
-player = NodePath("../../Player")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D8"]
 transform = Transform3D(28.786167, 0, 0, 0, 1, 0, 0, 0, 15.254395, 0, 0, 0)
@@ -420,10 +418,13 @@ mesh = SubResource("CylinderMesh_vonw3")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D28"]
 shape = SubResource("CylinderShape3D_oi3di")
 
-[node name="StaticBody3D29" type="StaticBody3D" parent="Floor"]
+[node name="StaticBody3D29" type="StaticBody3D" parent="Floor" node_paths=PackedStringArray("player")]
 transform = Transform3D(1.188743, 0, 0, 0, 4.8266807, 0, 0, 0, 1, -101.93148, 4.4699173, -116.3732)
 collision_layer = 2
 collision_mask = 2
+script = ExtResource("1_oi3di")
+player = NodePath("../../Player")
+triggerDistance = 35.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D29"]
 layers = 2
@@ -912,16 +913,20 @@ mesh = SubResource("CylinderMesh_vonw3")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D69"]
 shape = SubResource("CylinderShape3D_oi3di")
 
-[node name="CameraController" parent="." node_paths=PackedStringArray("lookTarget", "camera") instance=ExtResource("1_u52ul")]
+[node name="Node3D" type="Node3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -135.53288, 7.876709, -79.896286)
+
+[node name="CameraController" parent="." node_paths=PackedStringArray("lookTarget", "cinematicTarget", "camera") instance=ExtResource("1_u52ul")]
 transform = Transform3D(1, 0, 0, 0, 0.89109373, 0.45381945, 0, -0.45381945, 0.89109373, 0, 3.4423904, 5.5294695)
 lookTarget = NodePath("../Player")
+cinematicTarget = NodePath("../Floor/Node3D")
 camera = NodePath("../Camera3D2")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.04304675, -0.3208775, 0.946142, 0.014583921, 0.9471207, 0.3205459, -0.99896663, 0, 0.04545012, 14.0935755, 3.8044996, 0)
 
 [node name="Player" parent="." node_paths=PackedStringArray("CameraPivot") instance=ExtResource("2_vonw3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3144817, 0.35384202, 1.5223198)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.08386, 0.35384202, -6.701271)
 CameraPivot = NodePath("../CameraController")
 
 [node name="Camera3D2" type="Camera3D" parent="."]

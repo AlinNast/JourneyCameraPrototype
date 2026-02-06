@@ -87,5 +87,6 @@ public partial class Player : CharacterBody3D , ICameraController
     public void ChangeToPlayer()
     {
         isDoingCinematic = false;
+        ((ICameraController)CameraPivot).ChangeToPlayer();
     }
 }
