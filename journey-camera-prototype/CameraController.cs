@@ -1,10 +1,13 @@
 using Godot;
+using JourneyCameraPrototype;
 using System;
 
-public partial class CameraController : Node3D
+public partial class CameraController : Node3D, ICameraController
 {
 	[Export]
 	Node3D lookTarget;
+    [Export]
+    Node3D cameraTargetPosition;
 	[Export]
 	Camera3D camera;
 
@@ -64,7 +67,13 @@ public partial class CameraController : Node3D
         // Position the Camera relative to the Controller
         // Since the Controller is rotating, we just push the camera back 
         // along its local Z axis by the radius.
-        camera.Position = new Vector3(0, 0, radius);
+
+        cameraTargetPosition.Position = new Vector3(0, 0, radius);
+        
+        // this should be in the camere but it isnt but the camera works anyway :))
+        DebugDraw3D.DrawSphere(cameraTargetPosition.GlobalPosition, 0.5f, new Color(1, 0, 0));
+
+        camera.GlobalPosition = cameraTargetPosition.GlobalPosition;
 
         // Ensure the camera is looking at the pivot point
         camera.LookAt(this.GlobalPosition, Vector3.Up);
@@ -193,6 +202,7 @@ public partial class CameraController : Node3D
         {
             Vector3 hitPos = (Vector3)result2["position"];
             float distance = rayStart.DistanceTo(hitPos);
+            azimuth += -0.0007f;
             if (distance < minDistance)
                 minDistance = distance;
         }
@@ -200,6 +210,7 @@ public partial class CameraController : Node3D
         {
             Vector3 hitPos = (Vector3)result3["position"];
             float distance = rayStart.DistanceTo(hitPos);
+            azimuth += 0.0007f;
             if (distance < minDistance)
                 minDistance = distance;
         }
@@ -235,5 +246,15 @@ public partial class CameraController : Node3D
             //GD.Print("Path is clear.");
         }
         radius = Mathf.Clamp(radius, 0.5f, idealRadius);
+    }
+
+    public void ChangeToCinematic()
+    {
+        GD.Print("voila");
+    }
+
+    public void ChangeToPlayer()
+    {
+        throw new NotImplementedException();
     }
 }

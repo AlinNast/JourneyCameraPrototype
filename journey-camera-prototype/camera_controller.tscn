@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dsoqm5c0c5y7r" path="res://CameraController.cs" id="1_8y15a"]
 
-[node name="CameraController" type="Node3D" node_paths=PackedStringArray("camera")]
+[node name="CameraController" type="Node3D" node_paths=PackedStringArray("cameraTargetPosition", "camera")]
 script = ExtResource("1_8y15a")
-camera = NodePath("Camera3D")
+cameraTargetPosition = NodePath("CameraPosition")
+camera = NodePath("")
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="CameraPosition" type="Node3D" parent="."]
