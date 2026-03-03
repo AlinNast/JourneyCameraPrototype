@@ -10,22 +10,3 @@ export_credentials.cfg
 # Imported translations (automatically generated from CSV files)
 *.translation
 
-# Mono-specific ignores
-.mono/
-data_*/
-mono_crash.*.json
-*.db
-*.db-wal
-*.db-shm
-*.v2
-journey-camera-prototype/addons/debug_draw_3d/libs/.gdignore
-*.so
-journey-camera-prototype/addons/debug_draw_3d/libs/libdd3d.ios.template_debug.universal.dylib
-*.dylib
-*.wasm
-*.dll
-*.vsidx
-journey-camera-prototype/.vs/JOURNEYCAMERAPROTOTYPE/v17/.suo
-journey-camera-prototype/.vs/ProjectEvaluation/journeycameraprototype.metadata.v9.bin
-journey-camera-prototype/.vs/ProjectEvaluation/journeycameraprototype.projects.v9.bin
-*.bin
